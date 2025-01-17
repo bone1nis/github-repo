@@ -45,7 +45,7 @@ const RepoList = (): ReactElement => {
             }
           }
         },
-        { rootMargin: "50px" }
+        { rootMargin: "100px" }
       );
 
       if (lastRepoRef.current) {
