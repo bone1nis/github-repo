@@ -10,4 +10,5 @@ export default defineConfig({
       localsConvention: 'camelCase',
     },
   },
+  base: "/github-repo",
 })
