@@ -31,33 +31,42 @@ const RepoList = (): ReactElement => {
   }, [sortBy]);
 
   useEffect(() => {
-    if (loading !== "loading") {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            const currentTime = Date.now();
+    if (loading === "loading") return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          const currentTime = Date.now();
+          const timeDiff = currentTime - lastRequestTime;
 
-            if (currentTime - lastRequestTime >= 2000) {
+          if (timeDiff < 2000) {
+            const delay = 2000 - timeDiff;
+
+            const timeoutId = setTimeout(() => {
               dispatch(fetchRepoList(pageNumberRef.current));
               pageNumberRef.current += 1;
+              setLastRequestTime(Date.now());
+            }, delay);
 
-              setLastRequestTime(currentTime);
-            }
+            return () => clearTimeout(timeoutId);
+          } else {
+            dispatch(fetchRepoList(pageNumberRef.current));
+            pageNumberRef.current += 1;
+            setLastRequestTime(Date.now());
           }
-        },
-        { rootMargin: "50px" }
-      );
-
-      if (lastRepoRef.current) {
-        observer.observe(lastRepoRef.current);
-      }
-
-      return () => {
-        if (lastRepoRef.current) {
-          observer.unobserve(lastRepoRef.current);
         }
-      };
+      },
+      { rootMargin: "100px" }
+    );
+
+    if (lastRepoRef.current) {
+      observer.observe(lastRepoRef.current);
     }
+
+    return () => {
+      if (lastRepoRef.current) {
+        observer.unobserve(lastRepoRef.current);
+      }
+    };
   }, [loading]);
 
   const handleRemove = (id: number) => {
