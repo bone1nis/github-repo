@@ -8,9 +8,11 @@ import {
 
 import { IRepo } from "../../types/types";
 
-import { Button, Card } from "antd";
+import { Button, Card, Input } from "antd";
 
 import s from "./repoCard.module.scss";
+import Title from "antd/es/typography/Title";
+import Link from "antd/es/typography/Link";
 
 interface ComponentsProps {
   repo: IRepo;
@@ -67,45 +69,39 @@ const RepoCard = ({
 
   const content = !showEdit ? (
     <>
-      <h4 className={s.repoCardText}>Created at: {repo.created_at}</h4>
-      <h4 className={s.repoCardText}>Updated at: {repo.updated_at}</h4>
-      <a className={s.repoCardLink} href={repo.html_url}>
-        {repo.html_url}
-      </a>
+      <Title level={5}>Created at: {repo.created_at}</Title>
+      <Title level={5}>Updated at: {repo.updated_at}</Title>
+      <Link href={repo.html_url}>{repo.html_url}</Link>
     </>
   ) : (
     <form className={s.repoCardForm} onSubmit={handleSubmit}>
-      <input
+      <Input
         type="text"
         name="title"
         value={newItem?.title}
         onChange={handleInputChange}
         placeholder="title"
-        className={s.repoCardInput}
       />
-      <input
+      <Input
         type="text"
         name="created"
         value={newItem?.created}
         onChange={handleInputChange}
         placeholder="created"
-        className={s.repoCardInput}
       />
-      <input
+      <Input
         type="text"
         name="updated"
         value={newItem?.updated}
         onChange={handleInputChange}
         placeholder="updated"
-        className={s.repoCardInput}
       />
-      <input
+      <Input
         type="text"
         name="link"
         value={newItem?.link}
         onChange={handleInputChange}
         placeholder="link"
-        className={s.repoCardInput}
       />
       <Button type="primary" htmlType="submit">
         Save

@@ -21,22 +21,4 @@
     flex-direction: column;
     gap: 20px;
   }
-  &__input {
-    padding: 10px;
-    border: 1px solid #858585;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  &__text {
-    font-size: 14px;
-    font-weight: bold;
-  }
-  &__link {
-    word-wrap: break-word;
-    word-break: break-word;
-    transition: all 1s ease;
-    &:hover {
-      color: #2196f3;
-    }
-  }
 }
