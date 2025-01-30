@@ -19,7 +19,7 @@ interface fetchResponse {
 
 
 export const fetchRepoList = createAsyncThunk<fetchResponse, number | undefined>(
-    "cats/fetchCats",
+    "cats/fetchRepoList",
     async (value = 1, {getState}) => {
         let data;
 
