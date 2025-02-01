@@ -4,4 +4,5 @@ export type IRepo = {
     created_at: string,
     updated_at: string,
     html_url: string,
+    stars: number,
 }

@@ -1,12 +1,10 @@
-import { ReactElement } from "react";
-
 import { Select } from "antd";
 import { useAppDispatch } from "../../hooks/hooks";
 import { setSortBy } from "../../store/repoSlice";
 
 import s from "./repoFilters.module.scss";
 
-const RepoFilters = (): ReactElement => {
+const RepoFilters: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const handleChange = (e: string) => {

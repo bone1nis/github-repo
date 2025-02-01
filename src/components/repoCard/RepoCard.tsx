@@ -20,6 +20,7 @@ type IFormInput = {
   created: string;
   updated: string;
   link: string;
+  stars: number;
 };
 
 const RepoCard: React.FC<ComponentsProps> = ({ repo, onRemove, onSubmit }) => {
@@ -30,6 +31,7 @@ const RepoCard: React.FC<ComponentsProps> = ({ repo, onRemove, onSubmit }) => {
     created: repo.created_at,
     updated: repo.updated_at,
     link: repo.html_url,
+    stars: repo.stargazers_count
   });
 
   const onChangeEdit = useCallback(() => {
@@ -48,6 +50,7 @@ const RepoCard: React.FC<ComponentsProps> = ({ repo, onRemove, onSubmit }) => {
       created_at: newItem.created,
       updated_at: newItem.updated,
       html_url: newItem.link,
+      stargazers_count: newItem.stars
     };
 
     onSubmit(res);
@@ -56,11 +59,14 @@ const RepoCard: React.FC<ComponentsProps> = ({ repo, onRemove, onSubmit }) => {
 
   const content = !showEdit ? (
     <>
-      <Title ellipsis={true} level={5}>
+      <Title ellipsis={true} level={5} className={s.repoCardText}>
         Created at: {repo.created_at}
       </Title>
-      <Title ellipsis={true} level={5}>
+      <Title ellipsis={true} level={5} className={s.repoCardText}>
         Updated at: {repo.updated_at}
+      </Title>
+      <Title ellipsis={true} level={5} className={s.repoCardText}>
+        Stars: {repo.stargazers_count}
       </Title>
       <Link href={repo.html_url}>{repo.html_url}</Link>
     </>
@@ -86,6 +92,13 @@ const RepoCard: React.FC<ComponentsProps> = ({ repo, onRemove, onSubmit }) => {
         value={newItem?.updated}
         onChange={handleInputChange}
         placeholder="updated"
+      />
+      <Input
+        type="number"
+        name="stars"
+        value={newItem?.stars}
+        onChange={handleInputChange}
+        placeholder="stars"
       />
       <Input
         type="text"

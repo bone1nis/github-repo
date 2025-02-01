@@ -1,13 +1,18 @@
-import { ReactElement } from "react";
+import { useAppSelector } from "../../hooks/hooks";
 
 import { Header } from "antd/es/layout/layout";
+import Link from "antd/es/typography/Link";
+
+import Title from "antd/es/typography/Title";
 
 import s from "./appHeader.module.scss";
 
-const AppHeader = (): ReactElement => {
+const AppHeader: React.FC = () => {
+  const filterActive = useAppSelector(state => state.repo.sortBy)
   return (
-    <Header>
-      <h4 className={s.appHeaderTitle}>Github JS</h4>
+    <Header className={s.appHeader}>
+      <Link className={s.appHeaderTitle} href="/">GitJS</Link>
+      <Title className={s.appHeaderFilter} level={3}>{filterActive}</Title>
     </Header>
   );
 };

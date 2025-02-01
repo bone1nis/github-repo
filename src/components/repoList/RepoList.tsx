@@ -1,5 +1,5 @@
-import { ReactElement, useEffect, useRef, useState } from "react";
-import { Flex } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { Alert, Flex, Spin } from "antd";
 
 import { fetchRepoList, removeRepo, setRepo } from "../../store/repoSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
@@ -10,7 +10,7 @@ import RepoCard from "../repoCard/RepoCard";
 
 import s from "./repoList.module.scss";
 
-const RepoList = (): ReactElement => {
+const RepoList: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const repoList = useAppSelector((state) => state.repo.repoList);
@@ -18,17 +18,16 @@ const RepoList = (): ReactElement => {
   const sortBy = useAppSelector((state) => state.repo.sortBy);
 
   const lastRepoRef = useRef<HTMLDivElement | null>(null);
-  const pageNumberRef = useRef<number>(1);
 
+  const [pageNumber, setPageNumber] = useState<number>(1);
   const [lastRequestTime, setLastRequestTime] = useState(0);
 
   useEffect(() => {
-    pageNumberRef.current = 1;
+    dispatch(fetchRepoList(pageNumber));
 
-    dispatch(fetchRepoList(pageNumberRef.current));
-
-    pageNumberRef.current += 1;
-  }, [sortBy]);
+    setPageNumber((prev) => (prev += 1));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortBy, dispatch]);
 
   useEffect(() => {
     if (loading === "loading") return;
@@ -42,15 +41,15 @@ const RepoList = (): ReactElement => {
             const delay = 2000 - timeDiff;
 
             const timeoutId = setTimeout(() => {
-              dispatch(fetchRepoList(pageNumberRef.current));
-              pageNumberRef.current += 1;
+              dispatch(fetchRepoList(pageNumber));
+              setPageNumber((prev) => (prev += 1));
               setLastRequestTime(Date.now());
             }, delay);
 
             return () => clearTimeout(timeoutId);
           } else {
-            dispatch(fetchRepoList(pageNumberRef.current));
-            pageNumberRef.current += 1;
+            dispatch(fetchRepoList(pageNumber));
+            setPageNumber((prev) => (prev += 1));
             setLastRequestTime(Date.now());
           }
         }
@@ -58,16 +57,20 @@ const RepoList = (): ReactElement => {
       { rootMargin: "100px" }
     );
 
-    if (lastRepoRef.current) {
-      observer.observe(lastRepoRef.current);
+    const currentLastRepoRef = lastRepoRef.current;
+
+    if (currentLastRepoRef) {
+      observer.observe(currentLastRepoRef);
     }
 
     return () => {
-      if (lastRepoRef.current) {
-        observer.unobserve(lastRepoRef.current);
+      if (currentLastRepoRef) {
+        observer.unobserve(currentLastRepoRef);
       }
     };
-  }, [loading]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, dispatch]);
 
   const handleRemove = (id: number) => {
     dispatch(removeRepo(id));
@@ -84,7 +87,6 @@ const RepoList = (): ReactElement => {
       return (
         <div ref={isLast ? lastRepoRef : null} key={repo.id}>
           <RepoCard
-            key={repo.id}
             repo={repo}
             onRemove={() => handleRemove(repo.id)}
             onSubmit={handleSubmit}
@@ -101,11 +103,17 @@ const RepoList = (): ReactElement => {
   );
 
   const spinner = loading === "loading" && (
-    <div className={s.repoListLoading}>... загрузка ...</div>
+    <Spin className={s.repoListLoading} />
   );
 
   const error = loading === "error" && (
-    <div className={s.repoListError}>... упс, произошла ошибка ...</div>
+    <Alert
+      message="Ошибка"
+      description="Не удалось загрузить репозитории"
+      type="error"
+      showIcon
+      className={s.repoListError}
+    />
   );
 
   return (
