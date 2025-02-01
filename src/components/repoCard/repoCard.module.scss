@@ -1,21 +1,5 @@
 .repo-card {
   width: 400px;
-  color: #000000;
-  overflow-wrap: break-word;
-  &__remove {
-    cursor: pointer;
-    transition: all 0.3s ease;
-    &:hover {
-      fill: #2196f3;
-    }
-  }
-  &__edit {
-    cursor: pointer;
-    transition: all 0.3s ease;
-    &:hover {
-      fill: #2196f3;
-    }
-  }
   &__form {
     display: flex;
     flex-direction: column;

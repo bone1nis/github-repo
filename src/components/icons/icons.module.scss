@@ -1,0 +1,16 @@
+.icon {
+  &__remove {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover {
+      fill: #2196f3;
+    }
+  }
+  &__edit {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover {
+      fill: #2196f3;
+    }
+  }
+}
